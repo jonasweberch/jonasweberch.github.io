@@ -91,13 +91,13 @@
 
   /* HERO */
   .hero {
-    min-height: 80vh;
+    min-height: auto;
     display: grid;
     grid-template-columns: 1fr auto;
     align-items: center;
     gap: 6rem;
     padding-top: 7rem;
-    padding-bottom: 3rem;
+    padding-bottom: 6rem;
     overflow: hidden;
   }
   .hero-text { max-width: 500px; }
@@ -195,7 +195,7 @@
     margin: 0 auto;
   }
 
-  section { padding: 3.5rem 0; }
+  section { padding: 6.5rem 0; }
 
   .section-label {
     font-family: 'JetBrains Mono', monospace;
@@ -458,13 +458,12 @@
     align-items: baseline;
     justify-content: space-between;
     margin-bottom: 0.85rem;
-    border-bottom: 1px solid var(--rule);
-    padding-bottom: 0.5rem;
+    padding-bottom: 0;
   }
   .subsection-title {
     font-family: 'EB Garamond', serif;
     font-size: 1.05rem;
-    font-weight: 400;
+    font-weight: 600;
     color: var(--text);
   }
   .subsection-link {
@@ -478,6 +477,20 @@
     transition: border-color 0.2s;
   }
   .subsection-link:hover { border-color: var(--accent); }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.65s cubic-bezier(0.4,0,0.2,1), transform 0.65s cubic-bezier(0.4,0,0.2,1);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.32s; }
 
   /* ANIMATIONS */
   @keyframes fadeUp {
@@ -553,7 +566,7 @@ Economics student at HSG with broad professional experience, currently interning
 </div>
 
 <!-- PROJECTS -->
-<hr class="section-divider">
+<div style="height: 4rem;"></div>
 <div class="section-wrap" style="padding:0; overflow:hidden;">
   <div class="projects-banner">
     <img src="jonas_active.png" alt="" class="projects-banner-img">
@@ -565,20 +578,20 @@ Economics student at HSG with broad professional experience, currently interning
 </div>
 <div class="section-wrap">
   <section id="projects">
-    <p class="projects-intro">A selection of academic and analytical projects, alongside my internship experience.</p>
+    <p class="projects-intro reveal">A selection of academic and analytical projects, alongside my internship experience.</p>
 
     <!-- SGFER Articles -->
-    <div class="subsection-label">
+    <div class="subsection-label reveal">
       <span class="subsection-title">St. Gallen Financial Economics Review</span>
       <a href="https://www.sgfer.org/user/jweber/" target="_blank" class="subsection-link">All articles →</a>
     </div>
-    <div class="tiles" id="sgfer-tiles"></div>
+    <div class="tiles reveal reveal-delay-1" id="sgfer-tiles"></div>
 
     <!-- Other Projects -->
-    <div class="subsection-label" style="margin-top: 2.5rem;">
+    <div class="subsection-label reveal" style="margin-top: 3rem;">
       <span class="subsection-title">Other Projects</span>
     </div>
-    <div class="tiles tiles--auto">
+    <div class="tiles tiles--auto reveal reveal-delay-1">
       <a href="https://jonasweberch.github.io/presentation_quantumanalytics/" target="_blank" class="tile">
         <p class="tile-tag">Data Analytics · Presentation</p>
         <h3 class="tile-title">Transforming Data into Insight</h3>
@@ -594,7 +607,7 @@ Economics student at HSG with broad professional experience, currently interning
 <div class="section-wrap">
   <section id="contact">
     <p class="section-label">Contact</p>
-    <div class="section-grid">
+    <div class="section-grid reveal">
       <h2 class="section-heading">Let's connect</h2>
       <div class="contact-links">
         <a href="mailto:jonas_weber@bluewin.ch" class="contact-item">
@@ -660,6 +673,17 @@ Economics student at HSG with broad professional experience, currently interning
     `).join('');
   }
 
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
   // Banner parallax
   const bannerEl = document.querySelector('.projects-banner');
   const bannerImgEl = document.querySelector('.projects-banner-img');
@@ -674,6 +698,7 @@ Economics student at HSG with broad professional experience, currently interning
   parallaxBanner();
 
   renderArticles();
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
 
 </body>
