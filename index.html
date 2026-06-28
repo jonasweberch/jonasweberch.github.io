@@ -313,9 +313,9 @@
   }
   .section-heading {
     font-family: 'EB Garamond', serif;
-    font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+    font-size: clamp(2rem, 3.5vw, 3rem);
     font-weight: 400;
-    line-height: 1.15;
+    line-height: 1.05;
     position: sticky;
     top: 5rem;
     color: var(--text);
@@ -404,6 +404,51 @@
   }
   .tile-wide-body {
     padding: 1.75rem;
+  }
+
+  /* PROJECTS BANNER — C */
+  .projects-banner {
+    position: relative;
+    overflow: hidden;
+    height: 260px;
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 0;
+  }
+  .projects-banner-img {
+    position: absolute;
+    top: -20%;
+    left: 0;
+    width: 100%;
+    height: 140%;
+    object-fit: cover;
+    object-position: center 30%;
+    filter: grayscale(30%);
+    display: block;
+    will-change: transform;
+  }
+  .projects-banner-content {
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+    padding: 0 4rem 1.5rem;
+    width: 100%;
+    pointer-events: none;
+  }
+  .projects-banner-content .section-label {
+    margin-bottom: 0.3rem;
+    color: rgba(255,255,255,0.7);
+  }
+  .projects-banner-content h2 {
+    font-family: 'EB Garamond', serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 400;
+    line-height: 1.05;
+    color: #ffffff;
+    mix-blend-mode: normal;
+  }
+  @media (max-width: 768px) {
+    .projects-banner { height: 200px; }
   }
 
   /* SUBSECTION LABEL */
@@ -497,9 +542,17 @@ Economics student at HSG with broad professional experience, currently interning
 
 <!-- PROJECTS -->
 <hr class="section-divider">
+<div class="section-wrap" style="padding:0; overflow:hidden;">
+  <div class="projects-banner">
+    <img src="jonas_active.png" alt="" class="projects-banner-img">
+    <div class="projects-banner-content">
+      <p class="section-label">Projects &amp; Work</p>
+      <h2>Selected Projects</h2>
+    </div>
+  </div>
+</div>
 <div class="section-wrap">
   <section id="projects">
-    <p class="section-label">Projects &amp; Work</p>
     <p class="projects-intro">A selection of academic and analytical projects, alongside my internship experience.</p>
 
     <!-- SGFER Articles -->
@@ -515,9 +568,6 @@ Economics student at HSG with broad professional experience, currently interning
     </div>
     <div class="tiles tiles--auto">
       <a href="https://jonasweberch.github.io/presentation_quantumanalytics/" target="_blank" class="tile">
-        <div class="tile-img-wrap">
-          <img src="presentation.png" alt="Presentation" loading="lazy">
-        </div>
         <p class="tile-tag">Data Analytics · Presentation</p>
         <h3 class="tile-title">Transforming Data into Insight</h3>
         <p class="tile-desc">Academic presentation on data visualisation co-authored with Yann Rochaix. A new edition is upcoming in October 2026 in Basel.</p>
@@ -590,10 +640,6 @@ Economics student at HSG with broad professional experience, currently interning
     const container = document.getElementById('sgfer-tiles');
     container.innerHTML = sgferArticles.map(a => `
       <a href="${a.url}" target="_blank" class="tile">
-        <div class="tile-img-wrap">
-          <img src="${a.image}" alt="${a.title}" loading="lazy"
-               onerror="this.parentElement.style.display='none'">
-        </div>
         <p class="tile-tag">${a.tag}</p>
         <h3 class="tile-title">${a.title}</h3>
         <p class="tile-desc">${a.desc}</p>
@@ -601,6 +647,19 @@ Economics student at HSG with broad professional experience, currently interning
       </a>
     `).join('');
   }
+
+  // Banner parallax
+  const bannerEl = document.querySelector('.projects-banner');
+  const bannerImgEl = document.querySelector('.projects-banner-img');
+  function parallaxBanner() {
+    if (!bannerEl || !bannerImgEl) return;
+    const rect = bannerEl.getBoundingClientRect();
+    if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+    const progress = rect.top / window.innerHeight;
+    bannerImgEl.style.transform = `translateY(${progress * 40}px)`;
+  }
+  window.addEventListener('scroll', parallaxBanner, { passive: true });
+  parallaxBanner();
 
   renderArticles();
 </script>
